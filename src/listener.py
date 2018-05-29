@@ -53,9 +53,34 @@ def listen_process():
                 recvstr = deviceSerial + 'RECIEVED'
                 serial_port.write(recvstr.encode('UTF-8') + b"\n")
                 
+                print("Sending to CSV")
                 
                 filestr = str(deviceSerial) + ','+ str(latitude)+ ','+ str(longitude)+ ','+ str(logtime) + ','+ str(logdate)
                 print(filestr)
+                
+                ''''
+                postrequest = 'http://jaguzalivestockug.com/mobileapp/api/?cmd=devicelocation&device=' 
+                postrequest += str(deviceSerial)
+                postrequest += '&latitude='
+                postrequest += str(latitude)
+                postrequest += '&longitude='
+                postrequest += str(longitude)
+                postrequest += '&time='
+                postrequest += str(logdate) + ' '+ str(logtime)'''
+                
+                jaguzaurl = 'http://jaguzalivestockug.com/mobileapp/api/'
+                
+                jaguzadata = {
+                        'cmd' : 'devicelocation',
+                        'device' : str(deviceSerial),
+                        'latitude' : str(latitude),
+                        'longitude' : str(longitude),
+                        'time' : str(logdate) + ' '+ str(logtime),
+                        }
+                
+                response = requests.post(url = jaguzaurl, data = jaguzadata)
+                
+                print(response.content)
                 
                 # print("log_message: {}".format(log_message))
                 datafile = open("logs.csv", 'a')
