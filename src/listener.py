@@ -25,38 +25,47 @@ def listen_process():
         if data_read:
             incoming = data_read.decode('utf-8')
             incoming = incoming.strip()
-            print("Received: {}".format(incoming))    
-            print(incoming.find('RELAY'))  
+            # print("Received: {}".format(incoming))    
+            print "Received: {}".format(incoming)
+            # print(incoming.find('RELAY'))  
+            print incoming.find('RELAY')
             if incoming.find('RELAY') == -1:
                 
                 serialindex = incoming.index("SN")
                 deviceSerial = incoming[serialindex:serialindex+7]
-                print("DEVICESERIAL: {}".format(deviceSerial))
+                # print("DEVICESERIAL: {}".format(deviceSerial))
+                print "DEVICESERIAL: {}".format(deviceSerial)
                 
             
                 latindex = incoming.index("LAT")
                 latitude = incoming[latindex+3:latindex+11]
-                print("LATITUDE: {}".format(latitude))
+                # print("LATITUDE: {}".format(latitude))
+                print "LATITUDE: {}".format(latitude)
                 
             
                 longindex = incoming.index("LONG")
                 longitude = incoming[longindex+4:longindex+13]
-                print("LONGITUDE: {}".format(longitude)) 
+                # print("LONGITUDE: {}".format(longitude)) 
+                print "LONGITUDE: {}".format(longindex)
                 
                 
                 timedatestr = time.asctime()
                 logtime = timedatestr[11:19]
                 logdate = timedatestr[0:10] + ' ' + timedatestr[20:24]
-                print("TIME: {}".format(logtime)) 
-                print("DATE: {}".format(logdate)) 
+                # print("TIME: {}".format(logtime)) 
+                # print("DATE: {}".format(logdate)) 
+                print "TIME: {}".format(logtime)
+                print "DATE: {}".format(logdate)
                 
                 recvstr = deviceSerial + 'RECIEVED'
                 serial_port.write(recvstr.encode('UTF-8') + b"\n")
                 
-                print("Sending to CSV")
+                # print("Sending to CSV")
+                print "Sending to"
                 
                 filestr = str(deviceSerial) + ','+ str(latitude)+ ','+ str(longitude)+ ','+ str(logtime) + ','+ str(logdate)
-                print(filestr)
+                # print(filestr)
+                print filestr
                 
                 ''''
                 postrequest = 'http://jaguzalivestockug.com/mobileapp/api/?cmd=devicelocation&device=' 
@@ -80,9 +89,11 @@ def listen_process():
                 
                 response = requests.post(url = jaguzaurl, data = jaguzadata)
                 
-                print(response.content)
+                # print(response.content)
+                print response.content
                 
                 # print("log_message: {}".format(log_message))
+                # print "log_message: {}".format(log_message)
                 datafile = open("logs.csv", 'a')
                 datafile.write(filestr + "\n")
                 datafile.close()
